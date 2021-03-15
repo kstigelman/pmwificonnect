@@ -1,5 +1,7 @@
 #Luke Horst and Kyler Stigelman
 
 import os
+import string
 
-print(os.system("ping homepage.pennmanor.net"))
+ping = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
+print(ping)
