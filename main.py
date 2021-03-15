@@ -3,5 +3,5 @@
 import os
 import string
 
-ping = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
-print(ping)
+command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
+ping_line = command[5]
