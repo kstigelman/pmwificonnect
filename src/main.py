@@ -3,6 +3,7 @@
 #repeat the ping command for every iteration of the program that is run
 import os
 
+
 command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
 ping_line = command[5]
 
@@ -11,8 +12,8 @@ ping = ping_line[index+1:ping_line.rfind("/")]
 
 #if the ping is too high, have a system that changes the network/connections
 if float(ping) > 150:
-    print("Connection error!")
+    print("Connection error! Ping is", ping)
+    os.popen("sudo service network-manager restart")
 else:
     print("Connection ok")
 
-print(ping)
