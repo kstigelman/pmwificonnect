@@ -8,7 +8,9 @@ ping_line = command[5]
 index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
 ping = ping_line[index+1:ping_line.rfind("/")]
 
-
-print("Connection error!")
+if float(ping) > 150:
+    print("Connection error!")
+else:
+    print("Connection ok")
 
 print(ping)
