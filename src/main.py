@@ -11,9 +11,9 @@ def test():
     ping = ping_line[index+1:ping_line.rfind("/")]
 
     if float(ping) > 150:
-        return("Connection error! Ping is", ping)
+        print("Connection error!")
         os.popen("sudo service network-manager restart")
         test()
     else:
-        return("Connection ok")
+        return "Connection ok"
 print(test())
