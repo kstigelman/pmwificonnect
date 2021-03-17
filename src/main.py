@@ -3,6 +3,10 @@
 #repeat the ping command for every iteration of the program that is run
 import os
 import time
+from datetime import datetime
+
+from tkinter import *
+import tkinter.messagebox
 
 def test():
     command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
@@ -12,7 +16,7 @@ def test():
         os.popen("sudo ip link set wlp4s0 up")
 
         # Need a command to reconnect to internet
-        disconnects.append(time.now())
+        disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
         time.sleep(10)
         test()
     else:
@@ -24,7 +28,7 @@ def test():
             print("Connection error: Ping is too high!")
             os.popen("sudo service network-manager restart")
 
-            disconnects.append(time.now())
+            disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
             time.sleep(10)
             test()
@@ -34,4 +38,13 @@ def test():
 
 
 disconnects = []
-print(test())
+root=Tk()
+
+answer = tkinter.messagebox.askquestion('Wi-Fi Connector','You are disconnected from the Wi-Fi. Reconnect?')
+if answer == 'yes':
+    #do this
+else:
+    #do this
+
+#root.mainloop()
+#print(test())
