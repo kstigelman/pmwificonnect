@@ -4,46 +4,57 @@ import os
 import time
 from datetime import datetime
 
-# UI for users to input whether they want to run the test or not.
-def ask(question):
-    a = input(question)
+
+def ask():
+    a = input("Would you like to run the internet test? Y/N ")
 
     if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
         print('Testing...')
-        return True
+
+        def test():
+            disconnects = []
+            global ping
+            command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
+            if not command:
+                print("There is no connection!")
+                os.popen("sudo tee /etc/modprobe.d/hp.conf && sudo rfkill unblock all")
+                os.popen("sudo ip link set wlp4s0 up")
+
+                # Need a command to reconnect to internet
+                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                time.sleep(10)
+                test()
+            else:
+                ping_line = command[5]
+                index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
+                ping = ping_line[index + 1:ping_line.rfind("/")]
+
+            if float(ping) > 150:
+                print("Connection error: Ping is too high!")
+                os.popen("sudo service network-manager restart")
+
+                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+            else:
+                print("Connection ok")
+
+            time.sleep(10)
+            test()
+
+            b = input('You are disconnected from the Wi-Fi. Reconnect?')
+            if b == 'yes' or b == 'Yes' or b == 'y' or b == 'Y':
+                print(' ')
+            elif b == 'no' or b == 'No' or b == 'N' or b == 'n':
+                print('Ok. Closing...')
+            else:
+                print('Invalid input.')
+        # root.mainloop()
+        # print(test())
+
     elif a == 'N' or a == 'n' or a == 'No' or a == 'no':
-        print('Goodbye!')
-        return False
+        print('You may now close the window.')
     else:
-        ask("Invalid input! Please type 'y' for yes and 'n' for no")
-
-def reconnect():
-    if ask('You are disconnected from the Wi-Fi. Reconnect?'):
-        os.popen("nmcli radio wifi off")
-        time.sleep(1)
-        os.popen("nmcli radio wifi on")
-        disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-        time.sleep(10)
-def test():
-    command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
-
-    if not command:
-        reconnect()
-
-    else:
-        print("Connection is fine")
-        time.sleep(60)
-        #ping_line = command[5]
-        #index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
-        #ping = ping_line[index + 1:ping_line.rfind("/")]
-        ping = 100
-
-        if float(ping) > 150:
-            reconnect()
-
-    test()
+        print('Invalid input.')
+        ask()
 
 
-disconnects = []
-if ask("Would you like to run the internet test? Y/N "):
-    test()
+ask()
