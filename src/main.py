@@ -4,14 +4,15 @@ import os
 import time
 from datetime import datetime
 
+
 def ask():
     a = input("Would you like to run the internet test? Y/N ")
 
     if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
         print('Testing...')
 
-        disconnects = []
         def test():
+            disconnects = []
             global ping
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
             if not command:
