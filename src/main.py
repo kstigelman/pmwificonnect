@@ -6,8 +6,7 @@ from datetime import datetime
 
 
 def ask():
-    a = input("Would you like to run the internet test? Y/N ")
-
+    a = os.system('zenity -–question -–title=”Connection Test” -–text=”Would you like to run the internet test?”')
     if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
         print('Testing...')
 
