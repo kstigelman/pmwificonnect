@@ -1,50 +1,61 @@
-#Luke Horst and Kyler Stigelman
+# Luke Horst and Kyler Stigelman
 
-#repeat the ping command for every iteration of the program that is run
 import os
 import time
 from datetime import datetime
 
-from tkinter import *
-import tkinter.messagebox
+# UI for users to input whether they want to run the test or not.
+def ask():
+    a = input("Would you like to run the internet test? Y/N ")
 
-def test():
-    command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
-    if not command:
-        print("There is no connection!")
-        os.popen("sudo tee /etc/modprobe.d/hp.conf && sudo rfkill unblock all")
-        os.popen("sudo ip link set wlp4s0 up")
+    if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
+        print('Testing...')
 
-        # Need a command to reconnect to internet
-        disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-        time.sleep(10)
-        test()
+        def test():
+            command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
+            if not command:
+                print("There is no connection!")
+                os.popen("sudo tee /etc/modprobe.d/hp.conf && sudo rfkill unblock all")
+                os.popen("sudo ip link set wlp4s0 up")
+
+                # Need a command to reconnect to internet
+                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                time.sleep(10)
+                test()
+            else:
+                ping_line = command[5]
+                index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
+                ping = ping_line[index + 1:ping_line.rfind("/")]
+
+            if float(ping) > 150:
+                print("Connection error: Ping is too high!")
+                os.popen("sudo service network-manager restart")
+
+                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+
+                time.sleep(10)
+                test()
+
+            else:
+                return "Connection ok"
+
+            disconnects = []
+
+            b = input('You are disconnected from the Wi-Fi. Reconnect?')
+            if b == 'yes' or b == 'Yes' or b == 'y' or b == 'Y':
+                print(' ')
+            elif b == 'no' or b == 'No' or b == 'N' or b == 'n':
+                print('Ok. Closing...')
+            else:
+                print('Invalid input.')
+        # root.mainloop()
+        # print(test())
+
+    elif a == 'N' or a == 'n' or a == 'No' or a == 'no':
+        print('You may now close the window.')
     else:
-        ping_line = command[5]
-        index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
-        ping = ping_line[index+1:ping_line.rfind("/")]
-
-        if float(ping) > 150:
-            print("Connection error: Ping is too high!")
-            os.popen("sudo service network-manager restart")
-
-            disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-            time.sleep(10)
-            test()
-
-        else:
-            return "Connection ok"
+        print('Invalid input.')
+    ask()
 
 
-disconnects = []
-root=Tk()
-
-answer = tkinter.messagebox.askquestion('Wi-Fi Connector','You are disconnected from the Wi-Fi. Reconnect?')
-if answer == 'yes':
-    #do this
-else:
-    #do this
-
-#root.mainloop()
-#print(test())
+ask()
