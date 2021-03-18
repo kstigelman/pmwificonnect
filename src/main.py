@@ -4,7 +4,6 @@ import os
 import time
 from datetime import datetime
 
-# UI for users to input whether they want to run the test or not.
 def ask():
     a = input("Would you like to run the internet test? Y/N ")
 
@@ -13,6 +12,7 @@ def ask():
 
         disconnects = []
         def test():
+            global ping
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
             if not command:
                 print("There is no connection!")
@@ -53,7 +53,7 @@ def ask():
         print('You may now close the window.')
     else:
         print('Invalid input.')
-    ask()
+        ask()
 
 
 ask()
