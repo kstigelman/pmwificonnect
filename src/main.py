@@ -11,6 +11,7 @@ def ask():
     if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
         print('Testing...')
 
+        disconnects = []
         def test():
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
             if not command:
@@ -32,14 +33,11 @@ def ask():
                 os.popen("sudo service network-manager restart")
 
                 disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-                time.sleep(10)
-                test()
-
             else:
                 return "Connection ok"
 
-            disconnects = []
+            time.sleep(10)
+            test()
 
             b = input('You are disconnected from the Wi-Fi. Reconnect?')
             if b == 'yes' or b == 'Yes' or b == 'y' or b == 'Y':
