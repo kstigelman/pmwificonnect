@@ -4,6 +4,15 @@ import os
 import time
 from datetime import datetime
 
+def reconnect():
+    os.system('zenity --error --text="There is no connection!"')
+
+    os.popen("nmcli radio wifi off")
+    time.sleep(1)
+    os.popen("nmcli radio wifi on")
+
+    disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    time.sleep()
 
 def ask():
     a = os.system('zenity --question --title="Connection Test" --text="Would you like to run the internet test?"')
@@ -11,28 +20,10 @@ def ask():
         os.system('zenity --info --text="Testing..."')
 
         def test():
-            disconnects = []
             global ping
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
             if not command:
-                os.system('zenity --error --text="There is no connection!"')
-                os.popen("sudo tee /etc/modprobe.d/hp.conf && sudo rfkill unblock all")
-                os.popen("sudo ip link set wlp4s0 up")
-
-                # Need a command to reconnect to internet
-                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-                time.sleep(10)
-                test()
-            else:
-                ping_line = command[5]
-                index = ping_line.rfind("/", 0, ping_line.rfind("/") - 1)
-                ping = ping_line[index + 1:ping_line.rfind("/")]
-
-            if float(ping) > 150:
-                os.system('zenity --error --title="Connection Error" --text="Ping is too high!"')
-                os.popen("sudo service network-manager restart")
-
-                disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                reconnect()
             else:
                 os.system('zenity --info --text="Connection ok"')
 
@@ -50,5 +41,5 @@ def ask():
     elif a == 1:
         os.system('zenity --info --text="You may now close the window."')
 
-
+disconnects = []
 ask()
