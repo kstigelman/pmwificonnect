@@ -15,7 +15,7 @@ def ask():
             global ping
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
             if not command:
-                print("There is no connection!")
+                os.system('zenity --error --text="There is no connection!"')
                 os.popen("sudo tee /etc/modprobe.d/hp.conf && sudo rfkill unblock all")
                 os.popen("sudo ip link set wlp4s0 up")
 
@@ -29,31 +29,26 @@ def ask():
                 ping = ping_line[index + 1:ping_line.rfind("/")]
 
             if float(ping) > 150:
-                print("Connection error: Ping is too high!")
+                os.system('zenity --error --title="Connection Error" --text="Ping is too high!"')
                 os.popen("sudo service network-manager restart")
 
                 disconnects.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
             else:
-                print("Connection ok")
+                os.system('zenity --info --text="Connection ok"')
 
             time.sleep(10)
             test()
 
             b = os.system('zenity --question --title="Disconnected" --text="Would you like to reconnect?"')
             if b == 0:
-                print('Reconnecting...')
+                os.system('zenity --info --text="Reconnecting..."')
             elif b == 1:
-                print('Ok. Closing...')
-            else:
-                print('Invalid input.')
+                os.system('zenity --info --text="Ok. Closing..."')
         # root.mainloop()
         # print(test())
 
     elif a == 1:
-        print('You may now close the window.')
-    else:
-        print('Invalid input.')
-        ask()
+        os.system('zenity --info --text="You may now close the window."')
 
 
 ask()
