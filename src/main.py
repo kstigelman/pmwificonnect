@@ -5,7 +5,13 @@ import time
 from datetime import datetime
 
 def reconnect():
-    os.system('zenity --error --text="There is no connection!"')
+    #os.system('zenity --error --text="There is no connection!"')
+
+    b = os.system('zenity --question --title="Disconnected" --text="Would you like to reconnect?"')
+    if b == 0:
+        os.system('zenity --info --text="Reconnecting..."')
+    elif b == 1:
+        os.system('zenity --info --text="Ok. Closing..."')
 
     os.popen("nmcli radio wifi off")
     time.sleep(1)
@@ -22,6 +28,7 @@ def ask():
         def test():
             global ping
             command = os.popen("ping -c 1 homepage.pennmanor.net").readlines()
+
             if not command:
                 reconnect()
             else:
@@ -30,13 +37,8 @@ def ask():
             time.sleep(10)
             test()
 
-            b = os.system('zenity --question --title="Disconnected" --text="Would you like to reconnect?"')
-            if b == 0:
-                os.system('zenity --info --text="Reconnecting..."')
-            elif b == 1:
-                os.system('zenity --info --text="Ok. Closing..."')
-        # root.mainloop()
-        # print(test())
+
+
 
     elif a == 1:
         os.system('zenity --info --text="You may now close the window."')
