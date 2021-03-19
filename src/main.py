@@ -6,9 +6,9 @@ from datetime import datetime
 
 
 def ask():
-    a = os.system('zenity -–question -–title=”Connection Test” -–text=”Would you like to run the internet test?”')
-    if a == 'Y' or a == 'y' or a == 'Yes' or a == 'yes':
-        print('Testing...')
+    a = os.system('zenity --question --title="Connection Test" --text="Would you like to run the internet test?"')
+    if a == 0:
+        os.system('zenity --info --text="Testing..."')
 
         def test():
             disconnects = []
@@ -39,17 +39,17 @@ def ask():
             time.sleep(10)
             test()
 
-            b = input('You are disconnected from the Wi-Fi. Reconnect?')
-            if b == 'yes' or b == 'Yes' or b == 'y' or b == 'Y':
-                print(' ')
-            elif b == 'no' or b == 'No' or b == 'N' or b == 'n':
+            b = os.system('zenity --question --title="Disconnected" --text="Would you like to reconnect?"')
+            if b == 0:
+                print('Reconnecting...')
+            elif b == 1:
                 print('Ok. Closing...')
             else:
                 print('Invalid input.')
         # root.mainloop()
         # print(test())
 
-    elif a == 'N' or a == 'n' or a == 'No' or a == 'no':
+    elif a == 1:
         print('You may now close the window.')
     else:
         print('Invalid input.')
