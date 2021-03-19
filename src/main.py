@@ -36,10 +36,6 @@ def ask():
 
             time.sleep(10)
             test()
-
-
-
-
     elif a == 1:
         os.system('zenity --info --text="You may now close the window."')
 
